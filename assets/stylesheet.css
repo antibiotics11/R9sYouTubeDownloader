@@ -1,0 +1,103 @@
+@font-face {
+    font-family: "NanumGothic";
+    src: url("/assets/fonts/Nanum_Gothic/NanumGothic-Regular.ttf") format("truetype");
+}
+@font-face {
+    font-family: "NanumGothic-Bold";
+    src: url("/assets/fonts/Nanum_Gothic/NanumGothic-Bold.ttf") format("truetype");
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #212121;
+}
+
+#container {
+    color: white;
+    font-family: "NanumGothic", serif;
+}
+
+#header {
+    text-align: center;
+    margin-top: 2em;
+    cursor: default;
+}
+
+#header-title {
+    color: lightgrey;
+    font-size: 3em;
+}
+
+#header-input {
+    margin-top: 1em;
+}
+
+#input-video-url {
+    border-radius: 2em 2em;
+    cursor: text;
+    font-size: 2em;
+    width: 25em;
+    padding: 0.3em 0.5em;
+}
+
+#loading-image {
+    width: 30em;
+}
+
+#header-info {
+    margin-top: 0.5em;
+    font-size: 1.1em;
+}
+
+#header-info a {
+    color: lightgray;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#header-info img {
+    position: relative;
+    top: 0.2em;
+    width: 1em;
+}
+
+#content {
+    margin-top: 2em;
+    text-align: center;
+
+}
+
+#content-video-thumbnail {
+    display: inline;
+    width: 15em;
+}
+
+#content-vide-details {
+    text-align: left;
+    display: inline-block;
+    width: 30em;
+}
+
+#content-video-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#content-video-download-options {
+    margin-top: 2em;
+    width: 45em;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 2em;
+    border: 0.1em solid grey;
+    padding: 2em 1em;
+    text-align: left;
+}
+
+#content-video-download-options a {
+    margin-top: 0.5em;
+    font-size: 1.2em;
+    color: #4493f8;
+    text-decoration: none;
+}

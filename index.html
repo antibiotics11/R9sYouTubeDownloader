@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="content-language" content="ko-KR" />
+    <title> 방구석 YouTube 다운로더 </title>
+    <meta name="title" content="방구석 YouTube 다운로더" />
+    <meta name="author" content="room9stone.com 2024" />
+    <meta name="description" content="room9stone.com 2024" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="방구석 YouTube 다운로더" />
+    <meta property="og:description" content="room9stone.com 2024" />
+    <link rel="stylesheet" href="assets/stylesheet.css" type="text/css" />
+    <link rel="icon" href="assets/images/r9s_tp_logo.ico" type="image/x-icon" />
+    <script type="text/javascript" src="assets/classes/ApiRequest.js"></script>
+    <script type="text/javascript" src="assets/classes/ApiResponse.js"></script>
+    <script type="text/javascript" src="assets/classes/Api.js"></script>
+</head>
+<body oncontextmenu="return false" ondragstart="return false">
+    <div id="container">
+        <div id="header">
+            <div id="header-title">동영상 URL을 입력하세요</div>
+            <div id="header-input">
+                <input id="input-video-url"
+                       placeholder="https://www.youtube.com/watch?v=n4tK7LYFxI0"
+                       required="required"
+                />
+            </div>
+            <div id="header-info">Provided by
+                <a href="https://www.room9stone.com">room9stone</a> 2024&nbsp;
+                <img src="assets/images/r9s_tp_logo.ico" alt="r9s logo" />
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-loading" style="display: none;">
+                <img id="loading-image" src="assets/images/loading.gif"  alt="loading"/>
+            </div>
+            <div id="content-video-info" style="display: none;">
+                <img id="content-video-thumbnail" src="" alt="thumbnail" />
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div id="content-vide-details">
+                    <div id="content-video-title"></div>
+                    <br>
+                    <div id="content-video-description"></div>
+                </div>
+                <div id="content-video-download-options"></div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        const apiServerUrl = "http://localhost/video";
+        const apiService   = new Api(apiServerUrl);
+
+        const videoUrlInputField    = document.getElementById("input-video-url");
+        const videoLoadingField     = document.getElementById("content-loading");
+        const videoInfoField        = document.getElementById("content-video-info");
+        const videoThumbnailField   = document.getElementById("content-video-thumbnail");
+        const videoTitleField       = document.getElementById("content-video-title");
+        const videoDescriptionField = document.getElementById("content-video-description");
+        const videoDownloadUrlField = document.getElementById("content-video-download-options");
+
+        videoUrlInputField.addEventListener("input", () => {
+            if (videoUrlInputField.value.length > 0) {
+
+                const videoUrl = videoUrlInputField.value;
+                try {
+                    new URL(videoUrl);
+                } catch (_) {
+                    return false;
+                }
+
+                videoLoadingField.style.display = "block";
+                videoInfoField.style.display    = "none";
+
+                apiService.sendRequest(new ApiRequest(videoUrl, "info"), (apiResponse) => {
+
+                    if (apiResponse.status !== "success") {
+                        return false;
+                    }
+
+                    videoLoadingField.style.display = "none";
+                    videoInfoField.style.display    = "block";
+                    videoThumbnailField.src         = apiResponse.data.thumbnail.thumbnails[0].url;
+                    videoTitleField.innerHTML       = apiResponse.data.title;
+
+                    let videoDescription = apiResponse.data.shortDescription;
+                    if (videoDescription.length > 200) {
+                        videoDescription = videoDescription.substring(0, 197) + "...";
+                    }
+                    videoDescriptionField.innerHTML = videoDescription;
+
+                });
+                apiService.sendRequest(new ApiRequest(videoUrl, "all"), (apiResponse) => {
+
+                    let downloadLink = null;
+                    for (let i = 0; i < apiResponse.data.length; i++) {
+                        downloadLink = document.createElement("a");
+                        downloadLink.href = apiResponse.data[i].url;
+                        downloadLink.innerHTML = apiResponse.data[i].mimeType + " (" + apiResponse.data[i].qualityLabel + ") <br>";
+                        videoDownloadUrlField.appendChild(downloadLink);
+                    }
+
+                });
+
+            } else {
+                videoLoadingField.style.display = "none";
+                videoInfoField.style.display    = "none";
+            }
+        });
+
+    </script>
+</body>
+</html>
